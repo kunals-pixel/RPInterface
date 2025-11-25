@@ -1,2 +1,2 @@
-# ARTEMANN
-Protein-RNA interface library
+# RPInterface
+RNA-Protein interface library
