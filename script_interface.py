@@ -2341,10 +2341,13 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
             writer.writerows(summary_table)
 
     return output_clusters_data, residue_type, pairwise_table
+
 def reformat_cluster_residues(clusters_data, structure_name):
-    
+
     def normalize_residue_string(raw):
-        """Normalize residue string like '#1/A:ALA_67' → '1.A.ALA.67.'"""
+        """Normalize residue string like '#1/A:ALA_67' → '1.A.ALA.67.'.
+        Preserve chain ID's original case; uppercase residue name.
+        """
         if not raw:
             return ""
         s = str(raw).strip().lstrip("#")
@@ -2355,7 +2358,10 @@ def reformat_cluster_residues(clusters_data, structure_name):
         chain = parts[1] if len(parts) > 1 else ""
         resname = parts[2] if len(parts) > 2 else ""
         resid = parts[3] if len(parts) > 3 else ""
-        chain, resname = chain.upper(), resname.upper()
+
+        # preserve chain EXACTLY as in input (no .upper())
+        # but keep residue name uppercase for consistency
+        resname = resname.upper()
         normalized = ".".join(p for p in (model, chain, resname, resid) if p)
         if not normalized.endswith("."):
             normalized += "."
@@ -2442,7 +2448,7 @@ def main(filename):
 if __name__ == "__main__":
     from pathlib import Path
 
-    input_dir = Path("PDB")
+    input_dir = Path("test_PDB")
     pdb_files = list(input_dir.glob("*.[pP][dD][bB]"))
     cif_files = list(input_dir.glob("*.[cC][iI][fF]"))
     all_files = pdb_files + cif_files
