@@ -22,12 +22,12 @@ Download Pfam mappings (pdb_pfam_mapping.txt): https://ftp.ebi.ac.uk/pub/databas
 
 __Download PDBs containing nucleic acids__
 
-- “python pdb_download.py” _#Date used 01 Dec 2025_
+- “python pdb_download.py” _Structures used upto 01 Dec 2025. Change date in the script to current if required_
 
 after successful execution it will generate a folder ‘PDB’
 
 
-**Run script to save interfaces and generate tables**
+**Identify and save interfaces**
 
 Keep Rfam.pdb and pdb_pfam_mapping.txt in same folder as script_interfaces.py and PDB  then run the script to identify and save interfaces: 
 
