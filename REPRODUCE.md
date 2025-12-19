@@ -1,4 +1,4 @@
-**Prerequisites: networkx, Biopython, ContactExtractor, mkdssp, urs2, x3dna**
+**Prerequisites: networkx, biopython, ContactExtractor, mkdssp, urs2, x3dna**
 
 Install dependencies: 
 - “pip install networkx, biopython, os, re, csv, subprocess, requests, sys, pandas, matplotlib”
@@ -29,9 +29,9 @@ after successful execution it will generate a folder ‘PDB’
 
 **Identify and save interfaces**
 
-Keep Rfam.pdb and pdb_pfam_mapping.txt in same folder as script_interfaces.py and PDB  then run the script to identify and save interfaces: 
+Keep _Rfam.pdb_ and -pdb_pfam_mapping.txt_ in same folder as script_interfaces.py and folder PDB then run the script to identify and save interfaces: 
 
 - “python script_interfaces.py” or
-- “python script_interfaces_parallel.py” __#adjust MAX_WORKERS in the script according to your system._
+- “python script_interfaces_parallel.py” _adjust MAX_WORKERS in the script according to your system._
 
 
