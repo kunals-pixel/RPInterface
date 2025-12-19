@@ -1,5 +1,6 @@
 import sys
 sys.path.append("/home/kshewani/data/kshewani/projects/RPI/urs2/urslib2") #urslib2 path
+#from urslib2 import RSS, DSSR, SplitmmCIF, SplitPDB
 
 TYPE_SYMBOLS_SRC = '''
 
@@ -1061,6 +1062,23 @@ def Atom(idstr):
 def WriteAtomToPDB(atom):
     """
     https://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM
+    COLUMNS        DATA  TYPE    FIELD        DEFINITION
+    -------------------------------------------------------------------------------------
+     1 -  6        Record name   "ATOM  "
+     7 - 11        Integer       serial       Atom  serial number.
+    13 - 16        Atom          name         Atom name.
+    17             Character     altLoc       Alternate location indicator.
+    18 - 20        Residue name  resName      Residue name.
+    22             Character     chainID      Chain identifier.
+    23 - 26        Integer       resSeq       Residue sequence number.
+    27             AChar         iCode        Code for insertion of residues.
+    31 - 38        Real(8.3)     x            Orthogonal coordinates for X in Angstroms.
+    39 - 46        Real(8.3)     y            Orthogonal coordinates for Y in Angstroms.
+    47 - 54        Real(8.3)     z            Orthogonal coordinates for Z in Angstroms.
+    55 - 60        Real(6.2)     occupancy    Occupancy.
+    61 - 66        Real(6.2)     tempFactor   Temperature  factor.
+    77 - 78        LString(2)    element      Element symbol, right-justified.
+    79 - 80        LString(2)    charge       Charge  on the atom.
     """
 
     res = "ATOM  "
@@ -1612,6 +1630,23 @@ def SaveInterfaces(filepath, interfaces):
         EntryToFile(entry,filename, filename.split('.')[-1])
 
 
+
+'''
+if __name__ == "__main__":
+
+    
+    filepath = "4v88.cif"
+
+    interfaces = [
+                  [['1.A5.C.573.', '1.DS.LYS.5.'], '4v88_1.cif'],
+                  [['1.A2.A.1384.', '1.AU.LYS.32.'], '4v88_2.cif'],
+                  [['1.A5.C.497.', '1.De.LYS.8.'], '4v88_3.cif'],
+                  ]
+
+    SaveInterfaces(filepath, interfaces)
+'''
+
+
 import os, re, csv, subprocess, requests, sys
 import networkx as nx
 from collections import defaultdict
@@ -1720,7 +1755,7 @@ def contacts_extraction(structure_file):
     Replaces underscores with dots in residue IDs before returning.
     """
     
-    residue_mask = ""#1:A #1:C #1:G #1:T #1:U #1:DA #1:DC #1:DG #1:DT #1:DU #1:ALA #1:ARG #1:ASN #1:ASP #1:CYS #1:GLN #1:GLU #1:GLY #1:HIS #1:ILE #1:LEU #1:LYS #1:MET #1:PHE #1:PRO #1:SER #1:THR #1:TRP #1:TYR #1:VAL #1:1MA #1:2MG #1:6MZ #1:7MG #1:A2M #1:MA6 #1:OMG  #1:YYG #1:SAM #1:4AC #1:4SU #1:5MC #1:5MU #1:LV2 #1:OMC #1:OMU #1:SSU #1:UR3 #1:PSU #1:B8N #1:3TD #1:UY1 #1:CDP #1:UDP #1:ADP #1:GDP #1:CTP #1:UTP #1:ATP #1:GTP " "
+    residue_mask = "#1:A #1:C #1:G #1:T #1:U #1:DA #1:DC #1:DG #1:DT #1:DU #1:ALA #1:ARG #1:ASN #1:ASP #1:CYS #1:GLN #1:GLU #1:GLY #1:HIS #1:ILE #1:LEU #1:LYS #1:MET #1:PHE #1:PRO #1:SER #1:THR #1:TRP #1:TYR #1:VAL #1:1MA #1:2MG #1:6MZ #1:7MG #1:A2M #1:MA6 #1:OMG  #1:YYG #1:SAM #1:4AC #1:4SU #1:5MC #1:5MU #1:LV2 #1:OMC #1:OMU #1:SSU #1:UR3 #1:PSU #1:B8N #1:3TD #1:UY1 #1:CDP #1:UDP #1:ADP #1:GDP #1:CTP #1:UTP #1:ATP #1:GTP "
     
     pairwise_contacts = ContExt(
         inpfile1=structure_file, 
@@ -1734,22 +1769,6 @@ def contacts_extraction(structure_file):
         (dist, atom1.replace("_", "."), atom2.replace("_", "."))
         for dist, atom1, atom2 in pairwise_contacts
     ]
-    # -----------------------------
-    # Extract unique chain IDs HERE
-    # -----------------------------
-    chain_pattern = re.compile(r"#\d+/(\w+):")
-    unique_chains = set()
-
-    for dist, a1, a2 in updated_contacts:
-        for atom_str in (a1, a2):
-            m = chain_pattern.search(atom_str)
-            if m:
-                chain_id = m.group(1)
-                unique_chains.add(chain_id)
-
-    # Print or return chains — choose one
-    print(f"Unique chains in {structure_file}: {sorted(unique_chains)}")
-
     #print(updated_contacts)
     return updated_contacts
 
@@ -1898,7 +1917,7 @@ def fetch_rfam_mapping(rfam_file, structure_name):
     return {ch: sorted(set(ids)) for ch, ids in chain_to_rfam.items()}
 
 #sys.path.append("/home/kshewani/projects/RPI/urs2")
-#from urslib2 import RSS, DSSR, SplitmmCIF, SplitPDB
+from urslib2 import RSS, DSSR, SplitmmCIF, SplitPDB
 
 def build_na_ss_map(
         structure_fname,
@@ -2053,7 +2072,8 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
                    '1MA', '2MG', '6MZ', '7MG', 'A2M', 'MA6', 'OMG', 'YYG', 'SAM', '4AC', '4SU', '5MC', '5MU', 'LV2', 'OMC', 'OMU', 'SSU', 'UR3', 'PSU', 'B8N', '3TD', 'UY1', 'CDP', 'UDP', 'ADP', 'GDP', 'CTP', 'UTP', 'ATP', 'GTP'}
     AMINO_ACIDS = {
         'ALA', 'ARG', 'ASN', 'ASP', 'CYS', 'GLN', 'GLU', 'GLY', 'HIS', 'ILE',
-        'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL' }
+        'LEU', 'LYS', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'
+    }
 
     # atom id pattern (captures: model, chain, resname, resid, atom)
     #atom_id_pattern = re.compile(r"#(\d+)/(\w+):([A-Za-z0-9]+).(\d+)\.@?([A-Za-z0-9'\"-]+)?")
@@ -2068,8 +2088,10 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
 
 
     # build maps: protein SS and nucleotide SS from the single structure
-    prot_ss_map = get_prot_ss_map(structure_name)        
-    na_ss_map = build_na_ss_map(structure_name)
+    print("Calculating protein secondary structure")
+    prot_ss_map = get_prot_ss_map(structure_name)  
+    print("Calculating RNA/DNA secondary structure")
+    na_ss_map = build_na_ss_map(structure_name)          
     pfam_map = get_pfam_for_structure(structure_name, mapping_file=pfam_file)
     rfam_map = fetch_rfam_mapping(rfam_file, structure_name)
 
@@ -2089,7 +2111,6 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
         atom1 = atom1 or "UNK"
         atom2 = atom2 or "UNK"
 
-        # normalize the residue ids used elsewhere in the function (use underscore)
         try:
             res1_id = f"#{model1}/{chain1}:{resname1}.{resid1}"
             res2_id = f"#{model2}/{chain2}:{resname2}.{resid2}"
@@ -2111,7 +2132,6 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
             ss_for_aa = prot_ss_map.get(aa_res, "C")
 
             # ---- Pfam domain assignment (domain-level)
-            # aa_res format: '#1/A:SER.45'
             m_pf = re.match(r"#\d+/(\w+):([A-Za-z0-9]+)\.(\d+)", aa_res)
             if m_pf:
                 ch = m_pf.group(1).upper()
@@ -2125,7 +2145,7 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
                             pfam_hits.append(pfid)
                 pfam_id = ",".join(sorted(set(pfam_hits))) if pfam_hits else "NA"
             else:
-                pfam_id = "NA" 
+                pfam_id = "NA"
 
             # Extract Rfam ID for nucleotide chain (match chain id)
             chain_match_na = re.search(r"#\d+/(\w+):", na_res)
@@ -2317,16 +2337,14 @@ def find_interaction_clusters(pairwise_distances, structure_name, method=None, r
             if write_mode == "w":
                 writer.writeheader()
             writer.writerows(summary_table)
-    #print(output_clusters_data)
+
     return output_clusters_data, residue_type, pairwise_table
+
 
 
 def reformat_cluster_residues(clusters_data, structure_name):
 
     def normalize_residue_string(raw):
-        """
-        Preserve chain ID's original case; uppercase residue name.
-        """
         if not raw:
             return ""
         s = str(raw).strip().lstrip("#")
@@ -2339,6 +2357,7 @@ def reformat_cluster_residues(clusters_data, structure_name):
         resid = parts[3] if len(parts) > 3 else ""
 
         # preserve chain EXACTLY as in input (no .upper())
+        # but keep residue name uppercase for consistency
         resname = resname.upper()
         normalized = ".".join(p for p in (model, chain, resname, resid) if p)
         if not normalized.endswith("."):
@@ -2373,6 +2392,14 @@ def reformat_cluster_residues(clusters_data, structure_name):
 
     return formatted
 
+# Global variable to hold the lock for CSV writing
+csv_lock = None
+
+def init_pool(l):
+    """Initializer for the worker processes to share the lock."""
+    global csv_lock
+    csv_lock = l
+
 def main(filename):
     try:
         print(f"Extracting metadata from {filename}...")
@@ -2401,7 +2428,6 @@ def main(filename):
         #print("Reformated")
         #print(reformatted_clusters)
         interfaces = []
-
         if reformatted_clusters:
             input_base = os.path.splitext(os.path.basename(filename))[0]
             output_folder = os.path.join("interfaces", input_base)
@@ -2423,8 +2449,29 @@ def main(filename):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
+def safe_main_wrapper(filename):
+    """
+    Wraps the processing function to catch exceptions and prevent 
+    the worker process from crashing the pool.
+    """
+    try:
+        # Call your original processing function here
+        main(filename) 
+        return None
+    except Exception as e:
+        import traceback
+        error_msg = f"ERROR processing {filename}: {str(e)}\n{traceback.format_exc()}"
+        print(error_msg)
+        return error_msg
+
 if __name__ == "__main__":
     from pathlib import Path
+    import multiprocessing
+    from concurrent.futures import ProcessPoolExecutor
+
+    # --- CONFIGURATION: PREVENT CRASHES ---
+    # Start with 4. If stable, try 8. If it crashes, go down to 2.
+    MAX_WORKERS = 8 
 
     input_dir = Path("PDB")
     pdb_files = list(input_dir.glob("*.[pP][dD][bB]"))
@@ -2433,15 +2480,26 @@ if __name__ == "__main__":
 
     total_files = len(all_files)
     print(f"Total files to process: {total_files}")
+    print(f"Starting parallel processing with {MAX_WORKERS} workers...")
 
-    for idx, file_path in enumerate(all_files, start=1):
-        print(f"\nProcessing file {idx}/{total_files}: {file_path.name} ...")
-        main(str(file_path))
+    # Create a manager to handle the Lock for synchronization across processes
+    manager = multiprocessing.Manager()
+    lock = manager.Lock()
 
-'''if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python script_interface_new.py <path_to_pdb_or_cif_file>")
-        sys.exit(1)
-    
-    infile = sys.argv[1]
-    main(infile)'''
+    # Convert paths to strings for compatibility
+    file_list = [str(f) for f in all_files]
+
+    # Process files in parallel
+    # We use safe_main_wrapper instead of main directly
+    with ProcessPoolExecutor(max_workers=MAX_WORKERS, initializer=init_pool, initargs=(lock,)) as executor:
+        results = executor.map(safe_main_wrapper, file_list)
+        
+        # Iterate results to ensure they are processed and catch errors
+        for res in results:
+            if res:
+                # If res is not None, it contains an error message string
+                # You could log this to a file 'errors.log' if you want
+                pass
+
+    print("All processing complete.")
+
