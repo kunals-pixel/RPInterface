@@ -9,11 +9,11 @@ Install Contactextractor and for more information check https://github.com/febos
 Install dssp for protein secondary structure:
 - “sudo apt-get install dssp”
 
-For RNA secondary structure download usrlib2 and append (sys.path.append) the path at the top of the script_interface.py:
+For RNA secondary structure download usrlib2 and append (_sys.path.append_) the path at the top of the script_interface.py:
 - git clone https://github.com/febos/urslib2.git”
 
 Register and download x3dna-dssr binary from http://forum.x3dna.org/
-- Add the path of x3dna binary to /path_to_urslib2/urslib2/config.py
+- Add the path of x3dna binary to _"/path_to_urslib2/urslib2/config.py"_
 
 Download Rfam mappings (Rfam.pdb.gz): https://ftp.ebi.ac.uk/pub/databases/Rfam/CURRENT/
 
@@ -22,16 +22,16 @@ Download Pfam mappings (pdb_pfam_mapping.txt): https://ftp.ebi.ac.uk/pub/databas
 
 __Download PDBs containing nucleic acids__
 
-- “python pdb_download.py” _Structures used upto 01 Dec 2025. Change date in the script to current if required_
+- “python pdb_download.py”    _Structures used upto 01 Dec 2025. Change date in the script to current if required_
 
 after successful execution it will generate a folder ‘PDB’
 
 
 **Identify and save interfaces**
 
-Keep _Rfam.pdb_ and -pdb_pfam_mapping.txt_ in same folder as script_interfaces.py and folder PDB then run the script to identify and save interfaces: 
+Keep _Rfam.pdb_ and _pdb_pfam_mapping.txt_ in same folder as script_interfaces.py and folder PDB then run the script to identify and save interfaces: 
 
 - “python script_interfaces.py” or
-- “python script_interfaces_parallel.py”  _Number of threads can be changed by adjusting MAX_WORKERS in the script according to system._
+- “python script_interfaces_parallel.py”    _Number of threads can be changed by adjusting MAX_WORKERS in the script according to system._
 
 
