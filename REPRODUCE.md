@@ -22,9 +22,9 @@ Download Pfam mappings (pdb_pfam_mapping.txt): https://ftp.ebi.ac.uk/pub/databas
 
 __Download PDBs containing nucleic acids__
 
-- “python pdb_download.py”    _Structures used upto 01 Dec 2025. Change date in the script to current if required_
+- “python pdb_download.py”    
+after successful execution it will generate a folder ‘PDB’. Structures were downloaded up to 01 Dec 2025. Change date in the script to current if required
 
-after successful execution it will generate a folder ‘PDB’
 
 
 **Identify and save interfaces**
