@@ -32,6 +32,6 @@ after successful execution it will generate a folder ‘PDB’
 Keep _Rfam.pdb_ and -pdb_pfam_mapping.txt_ in same folder as script_interfaces.py and folder PDB then run the script to identify and save interfaces: 
 
 - “python script_interfaces.py” or
-- “python script_interfaces_parallel.py” _adjust MAX_WORKERS in the script according to your system._
+- “python script_interfaces_parallel.py”  _Number of threads can be changed by adjusting MAX_WORKERS in the script according to system._
 
 
