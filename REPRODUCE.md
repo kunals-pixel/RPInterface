@@ -1,4 +1,5 @@
 **Prerequisites: networkx, Biopython, ContactExtractor, mkdssp, urs2, x3dna**
+
 Install dependencies: 
 - “pip install networkx, biopython, os, re, csv, subprocess, requests, sys, pandas, matplotlib”
 Install Contactextractor and for more information check https://github.com/febos/ContExt
@@ -20,7 +21,10 @@ after successful execution it will generate a folder ‘PDB’
 
 
 **Run script to save interfaces and generate tables**
+
 Keep Rfam.pdb and pdb_pfam_mapping.txt in same folder as script_interfaces.py and PDB  then run the script to identify and save interfaces: 
-- “python script_interfaces.py” or “python script_interfaces_parallel.py” #adjust MAX_WORKERS in the script according to your system.
+
+- “python script_interfaces.py” or
+- “python script_interfaces_parallel.py” #adjust MAX_WORKERS in the script according to your system.
 
 
