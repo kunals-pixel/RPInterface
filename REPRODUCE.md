@@ -6,8 +6,8 @@ Install dependencies:
 Install Contactextractor and for more information check https://github.com/febos/ContExt
 - “pip install ContactExtractor”
 
-Install dssp for protein secondary structure:
-- “sudo apt-get install dssp”
+Download and install dssp(mkdssp version 4.5.7) for protein secondary structure from the following addres:
+- https://github.com/PDB-REDO/dssp
 
 For RNA secondary structure download usrlib2 and append (_sys.path.append_) the path at the top of the script_interface.py:
 - git clone https://github.com/febos/urslib2.git”
